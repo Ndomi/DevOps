@@ -153,3 +153,39 @@ docker-compose images
 docker-compose ps
 
 docker-compose top
+
+
+
+# Example Code
+
+## Put a limit on the amount of memory a container can use.
+    i.e limit memory to 512 MiB
+
+```
+docker container run -p 5000:5000 -d -m 512m in28min/hello-world-java:0.0.1.RELEASE
+```
+
+
+## Assign a certian percentage of the CPU to the container.
+    i.e 50% of CPU
+
+```
+docker container run -p 5000:5000 -d -m 512m --cpu-quota=58000 in28min/hello-world-java:0.0.1.RELEASE
+```
+
+## Building and pushing a image(for python)(In this case, docker hub)
+```
+docker build -t hello-world-python:0.0.2.RELEASE .
+docker tag hello-world-python:0.0.2.RELEASE ndomi/hello-world-python
+docker run -p 5000:5000 -d ndomi/hello-world-python:0.0.2.RELEASE
+docker push ndomi/hello-world-python
+
+```
+
+## Building and pushing a image(for nodejs)(In this case, docker hub)
+```
+## Building and pushing a image(for nodejs)(In this case, docker hub)
+docker build -t hello-world-nodejs:0.0.2.RELEASE .
+docker tag hello-world-nodejs:0.0.2.RELEASE ndomi/hello-world-nodejs
+docker run -p 5001:5000 -d ndomi/hello-world-nodejs:0.0.2.RELEASE
+docker push ndomi/hello-world-nodejs
