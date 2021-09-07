@@ -1,0 +1,4 @@
+#!/bin/bash
+apt update -y && apt upgrade -y
+apt install apache2 -y
+echo "Welcome AZ-104 Training Bootcamp - Host " $HOSTNAME"!" > /var/www/html/index.html
