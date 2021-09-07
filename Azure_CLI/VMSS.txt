@@ -1,0 +1,11 @@
+#cloud-config
+package_upgrade: true
+packages:
+  - apache2
+write_files:
+  - owner: www-data:www-data
+  - path: /var/www/html/index.html
+    content: |
+      Webserver in Virtual Machine Set !
+runcmd:
+  - service apache2 restart      
