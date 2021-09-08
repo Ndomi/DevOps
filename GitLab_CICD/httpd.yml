@@ -1,0 +1,24 @@
+---
+- hosts: all
+  tasks:
+    - name: Install Apache
+      package:
+        name: httpd
+        state: latest
+      register: package_check
+      ignore_errors: yes
+
+    - name: "Print result"
+      debug:
+        var: package_check
+
+    - name: "Start Apache"
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      
+    - name: "Edit the index.html file"
+      template:
+        src: debug.j2
+        dest: /var/www/html/index.html
