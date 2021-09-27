@@ -1,0 +1,11 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: slow
+provisioner: kubernetes.io/azure-disk
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+parameters:
+  skuName: Standard_LRS
+  location: westus
+  storageAccount: azure_storage_account_name
