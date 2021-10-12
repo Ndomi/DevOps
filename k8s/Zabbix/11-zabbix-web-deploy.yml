@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: zabbix-web
+    namespace: zabbix
+spec:
+    replicas: 5
+    selector:
+        matchLabels:
+            app: zabbix-web
+    template:
+        metadata:
+            labels:
+                app: zabbix-web
+        spec:
+            containers:
+                - name: zabbix-web
+                  image: zabbix/zabbix-web-nginx-mysql
+                  imagePullPolicy: IfNotPresent
+                  ports:
+                      - containerPort: 80
+                        name: web
+                        protocol: TCP
+                  env:
+                      - name: DB_SERVER_HOST
+                        value: "mysql"
+                      - name: ZBX_SERVER_HOST
+                        value: "zabbixserver"
+                      - name: MYSQL_USER
+                        value: "zabbix"
+                      - name: MYSQL_PASSWORD
+                        value: "zabbix"
+                      - name: TZ
+                        value: "Africa/Johannesburg"
