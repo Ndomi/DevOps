@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  DevEC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: "ami-09e2d756e7d78558d"
+      InstanceType: "t3.micro"
+      KeyName: New_Key_Ireland

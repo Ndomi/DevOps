@@ -1,0 +1,141 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 
+
+Parameters: 
+
+Mappings: 
+
+Conditions: 
+
+Resources: 
+  LogicalID:
+    Type: AWS::EC2::Instance
+    Properties:
+      AdditionalInfo: "String"
+      Affinity: "String"
+      AvailabilityZone: "String"
+      BlockDeviceMappings:
+        BlockDeviceMappings
+      CpuOptions:
+        CoreCount: Number
+        ThreadsPerCore: Number
+      CreditSpecification:
+        CPUCredits: "Number"
+      DisableApiTermination: false
+      EbsOptimized: false
+      ElasticGpuSpecifications:
+        ElasticGpuSpecifications
+      ElasticInferenceAccelerators:
+        ElasticInferenceAccelerators
+      EnclaveOptions:
+        Enabled: false
+      HibernationOptions:
+        Configured: false
+      HostId: "String"
+      HostResourceGroupArn: "String"
+      IamInstanceProfile: "String"
+      ImageId: "String"
+      InstanceInitiatedShutdownBehavior: "String"
+      InstanceType: "String"
+      Ipv6AddressCount: Number
+      Ipv6Addresses:
+        Ipv6Addresses
+      KernelId: "String"
+      KeyName: "String"
+      LaunchTemplate:
+        LaunchTemplateId: "String"
+        LaunchTemplateName: "String"
+        Version: "String"
+      LicenseSpecifications:
+        LicenseSpecifications
+      Monitoring: String
+      NetworkInterfaces:
+        NetworkInterfaces
+      PlacementGroupName: "String"
+      PrivateDnsNameOptions:
+        EnableResourceNameDnsAAAARecord: false
+        EnableResourceNameDnsARecord: false
+        HostnameType: "String"
+      PrivateIpAddress: "false"
+      PropagateTagsToVolumeOnCreation: String
+      RamdiskId: "String"
+      SecurityGroupIds:
+        SecurityGroupIds
+      SecurityGroups:
+        SecurityGroups
+      SourceDestCheck: false
+      SsmAssociations:
+        SsmAssociations
+      SubnetId: "String"
+      Tags:
+        Tags
+      Tenancy: "String"
+      UserData: "String"
+      Volumes:
+        Volumes
+
+LogicalID:
+  Type: AWS::S3::Bucket
+  Properties:
+    AccelerateConfiguration:
+      AccelerationStatus: "String"
+    AccessControl: "String"
+    AnalyticsConfigurations:
+      AnalyticsConfigurations
+    BucketEncryption:
+      ServerSideEncryptionConfiguration:
+        -
+    BucketName: "String"
+    CorsConfiguration:
+      CorsRules:
+        -
+    IntelligentTieringConfigurations:
+      IntelligentTieringConfigurations
+    InventoryConfigurations:
+      InventoryConfigurations
+    LifecycleConfiguration:
+      Rules:
+        -
+    LoggingConfiguration:
+      DestinationBucketName: "String"
+      LogFilePrefix: "String"
+    MetricsConfigurations:
+      MetricsConfigurations
+    NotificationConfiguration:
+      LambdaConfigurations:
+        -
+      QueueConfigurations:
+        -
+      TopicConfigurations:
+        -
+    ObjectLockConfiguration:
+      ObjectLockEnabled: "String"
+    ObjectLockEnabled: false
+    OwnershipControls:
+      Rules:
+        -
+    PublicAccessBlockConfiguration:
+      BlockPublicAcls: false
+      BlockPublicPolicy: false
+      IgnorePublicAcls: false
+      RestrictPublicBuckets: false
+    ReplicationConfiguration:
+      Role: "false"
+      Rules:
+        -
+    Tags:
+      Tags
+    VersioningConfiguration:
+      Status: "false"
+    WebsiteConfiguration:
+      ErrorDocument: "String"
+      IndexDocument: "String"
+      RoutingRules:
+        -
+LogicalID:
+  Type: AWS::S3::BucketPolicy
+  Properties:
+    Bucket: "String" # Required
+    PolicyDocument: JSON # Required
+    
+Outputs:
