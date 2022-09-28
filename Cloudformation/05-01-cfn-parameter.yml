@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: KeyName Parameter demo
+
+Parameters:
+  MyKeyName:
+    Description: Select the Key Name from the list
+    Type: AWS::EC2::KeyPair::KeyName
+
+  MyAvailabilityZones:
+    Description: Select the Availability Zones from the list
+    Type: String
+    Default: eu-west-1a
+    AllowedValues:
+      - eu-west-1a
+      - eu-west-1b
+      - eu-west-1c
+
+  MyInstanceType:
+    Description: Select the Instance Type from the list
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.large
+      - t3.medium
+
+Resources:
+  DevEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: "ami-09e2d756e7d78558d"
+      InstanceType:
+        Ref: MyInstanceType
+      KeyName: New_Key_Ireland
+      SecurityGroups:
+        - default
+        - Ref: SSHSecurityGroup
+      AvailabilityZone: 
+        Ref: MyAvailabilityZones
+
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SSH Security Group
+      SecurityGroupIngress:
+        - IpProtocol: tcp 
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+
+        - IpProtocol: tcp
+          FromPort: '8080'
+          ToPort: '8080'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: SSH-SG
+            
+    

@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Helper Script demo
+
+Resources:
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: My SG with port 22 and 8080 inbound
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+
+  MyVMInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: 
+      InstanceType: 
+      KeyName: 
+        SecurityGroup:
+          
