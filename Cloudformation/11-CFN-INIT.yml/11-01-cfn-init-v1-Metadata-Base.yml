@@ -1,0 +1,128 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Helper Script demo
+
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+
+Resources:
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: My SG with port 22 and 8080 inbound
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '8080'
+          ToPort: '8080'
+          CidrIp: 0.0.0.0/0
+
+  MyVMInstance:
+    Type: AWS::EC2::Instance
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT5M
+    Metadata:
+      Comment: Deploy a simple tomcat Application
+      AWS::CloudFormation::Init:
+        configSets:
+          SingleAppCS:
+            - App1
+          DualAppCS:
+            - ConfigSet: "SingleAppCS"
+            - App2
+          default:
+            - ConfigSet: "DualAppCS"
+        App1:
+          packages:
+            yum:
+              java-1.8.0-openjdk.x86_64: []
+              java-1.8.0-openjdk-devel: []
+              tomcat: []
+          groups:
+            groupone: {}
+            grouptwo:
+              gid: "501"
+          users:
+            user1:
+              groups:
+                - groupone
+                - grouptwo
+              uid: "501"  
+              homeDir: "/tmp"
+          sources:
+            /tmp: "https://cfn-init543165.s3.eu-west-1.amazonaws.com/demo1.zip"
+          files:
+            "/etc/cfn/cfn-hub.conf":
+              content: !Sub |
+                [main]
+                stack={AWS::StackId}
+                region={AWS::Region}
+                interval=7
+              mode: "000400"
+              owner: "root"
+              group: "root"
+            "/etc/cfn/hooks.d/cfn-auto-reloader.conf":
+              content: !Sub |
+                [cfn-auto-reloader-hook]
+                triggers=posts.update
+                path=Resource.MyVMInstance.Metadata.AWS::CloudFormation::Init
+                action=/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource MyVMInstance --region ${AWS::Region}
+              mode: "000400"
+              owner: "root"
+              group: "root"
+          commands:
+            test1:
+              command: "chmod 755 demo.war"
+              cwd: "/tmp"
+            test2:
+              command: "sudo yum -y erase java-1.7.0-openjdk.x86_64"
+              cwd: "~"
+            test3:
+              command: "rm -rf demo*"
+              cwd: "/var/lib/tomcat/webapps"
+            test4:
+              command: "cp demo.war /var/lib/tomcat/webapps"
+              cwd: "/tmp"
+            test5:
+              command: "sudo systemctl start tomcat.service"
+          services:
+            sysinit:
+              tomcat:
+                enabled: "true"
+                ensureRunning: "true"
+        App2:
+          commands:
+            test1:
+              command: "mkdir ROOT"
+              cwd: "/var/lib/tomcat/webapps"
+            test2:
+              command: "echo \"$INDEXCONTENT\" > index.html"
+              env:
+                INDEXCONTENT: "Root page of tomcat App2"
+              cwd: "/var/lib/tomcat/webapps/ROOT"
+    Properties:
+      ImageId: ami-09e2d756e7d78558d
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroups:
+        - !Ref MySecurityGroup
+      UserData:
+        "Fn::Base64":
+          !Sub |
+            #!/bin/bash -xe
+            yum update -y aws-cfn-bootstrap
+            /opt/aws/bin/cfn-init -s ${AWS::StackId} -r MyVMInstance --region ${AWS::Region} || error_exit 'Failed to run cfn-init'
+            /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource MyVMInstance --region ${AWS::Region}
+            /opt/aws/bin/cfn-hub || error_exit 'Failed to start cfn-hub'
+
+Outputs:
+  App1URL:
+    Description: Application1 URL to access
+    Value: !Sub 'http://${MyVMInstance.PublicDnsName}:8080/demo/hello'
+  App2URL:
+    Description: Application2 URL to access
+    Value: !Sub 'http://${MyVMInstance.PublicDnsName}:8080/index.html'  
