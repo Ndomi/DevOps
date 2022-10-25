@@ -1,0 +1,177 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "Simple 3 tier web application template"
+Parameters:
+  MyKeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Select the KeyPair
+
+  VpcCidr:
+    Default: '10.0.0.0/16'
+    Type: String
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+
+  InstanceType:
+    Default: 't2.micro'
+    Type: String
+
+  SSHLocation:
+    Description: The IP address range that can be used to SSH to the EC2 instances
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x
+
+Mappings:
+  AWSInstanceType2Arch:
+    t1.micro:
+      Arch: HVM64
+    t2.nano:
+      Arch: HVM64
+    t2.micro:
+      Arch: HVM64
+    t2.small:
+      Arch: HVM64
+    t2.medium:
+      Arch: HVM64
+    t2.large:
+      Arch: HVM64
+    m1.small:
+      Arch: HVM64
+    m1.medium:
+      Arch: HVM64
+    m1.large:
+      Arch: HVM64
+    m1.xlarge:
+      Arch: HVM64
+    m2.xlarge:
+      Arch: HVM64
+    m2.2xlarge:
+      Arch: HVM64
+    m2.4xlarge:
+      Arch: HVM64
+    m3.medium:
+      Arch: HVM64
+    m3.large:
+      Arch: HVM64
+    m3.xlarge:
+      Arch: HVM64
+    m3.2xlarge:
+      Arch: HVM64
+    m4.large:
+      Arch: HVM64
+    m4.xlarge:
+      Arch: HVM64
+    m4.2xlarge:
+      Arch: HVM64
+    m4.4xlarge:
+      Arch: HVM64
+    m4.10xlarge:
+      Arch: HVM64
+    c1.medium:
+      Arch: HVM64
+    c1.xlarge:
+      Arch: HVM64
+    c3.large:
+      Arch: HVM64
+    c3.xlarge:
+      Arch: HVM64
+    c3.2xlarge:
+      Arch: HVM64
+    c3.4xlarge:
+      Arch: HVM64
+    c3.8xlarge:
+      Arch: HVM64
+    c4.large:
+      Arch: HVM64
+    c4.xlarge:
+      Arch: HVM64
+    c4.2xlarge:
+      Arch: HVM64
+    c4.4xlarge:
+      Arch: HVM64
+    c4.8xlarge:
+      Arch: HVM64
+    g2.2xlarge:
+      Arch: HVMG2
+    g2.8xlarge:
+      Arch: HVMG2
+    r3.large:
+      Arch: HVM64
+    r3.xlarge:
+      Arch: HVM64
+    r3.2xlarge:
+      Arch: HVM64
+    r3.4xlarge:
+      Arch: HVM64
+    r3.8xlarge:
+      Arch: HVM64
+    i2.xlarge:
+      Arch: HVM64
+    i2.2xlarge:
+      Arch: HVM64
+    i2.4xlarge:
+      Arch: HVM64
+    i2.8xlarge:
+      Arch: HVM64
+    d2.xlarge:
+      Arch: HVM64
+    d2.2xlarge:
+      Arch: HVM64
+    d2.4xlarge:
+      Arch: HVM64
+    d2.8xlarge:
+      Arch: HVM64
+    hi1.4xlarge:
+      Arch: HVM64
+    hs1.8xlarge:
+      Arch: HVM64
+    cr1.8xlarge:
+      Arch: HVM64
+    cc2.8xlarge:
+      Arch: HVM64
+  AWSRegionArch2AMI:
+    us-east-1:
+      HVM64: ami-0ff8a91507f77f867
+      HVMG2: ami-0a584ac55a7631c0c
+    
+Resources:
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsHostnames: True
+      EnableDnsSupport: True
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: !Select [ 0, !Cidr [ !Ref VpcCidr, 12, 8 ] ]
+      MapPublicIpOnLaunch: True
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref AWS::Region
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: !Select [ 1, !Cidr [ !Ref VpcCidr, 12, 8 ] ]
+      MapPublicIpOnLaunch: True
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref AWS::Region
+
+  PublicSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: !Select [ 2, !Cidr [ !Ref VpcCidr, 12, 8 ] ]
+      MapPublicIpOnLaunch: True
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref AWS::Region
+
+  InternetGateway:

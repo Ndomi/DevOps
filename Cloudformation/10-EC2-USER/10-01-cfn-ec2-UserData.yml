@@ -31,6 +31,7 @@ Parameters:
   KeyName:
     Description: Key name SSH to VM's
     Type: AWS::EC2::KeyPair::KeyName
+
   AvailabilityZone:
     Description: Select the availability zone
     Type: String 
