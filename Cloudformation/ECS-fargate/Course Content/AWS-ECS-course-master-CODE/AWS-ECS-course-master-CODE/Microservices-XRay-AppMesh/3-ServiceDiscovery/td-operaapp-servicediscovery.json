@@ -1,0 +1,57 @@
+{
+ "executionRoleArn": "arn:aws:iam::Add-Your_Account_ID:role/ecsTaskExecutionRole",
+ "taskRoleArn": "arn:aws:iam::Add-Your_Account_ID:role/ecsTaskRole",
+  "containerDefinitions": [
+      {
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/microservice-demo",
+            "awslogs-region": "us-west-2",
+            "awslogs-stream-prefix": "ecs"
+          }
+        },
+        "portMappings": [
+              {
+                  "protocol": "tcp",
+                  "containerPort": 80
+              }
+          ],
+          "environment": [
+              {
+                  "name": "PORT",
+                  "value": "80"
+              }
+          ],
+          "memory": 128,
+          "image": "pauloclouddev/operaapp:latest",
+          "essential": true,
+          "name": "operaapp"
+      },
+      {
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/microservice-demo",
+            "awslogs-region": "us-west-2",
+            "awslogs-stream-prefix": "opera/xray"
+          }
+        },
+        "portMappings": [
+          {
+            "protocol": "udp",
+            "containerPort": 2000
+          }
+        ],
+        "cpu": 32,
+        "memoryReservation": 256,
+        "image": "amazon/aws-xray-daemon",        
+        "name": "xray-daemon"
+      }
+  ],
+  "family": "td-operaapp",
+  "requiresCompatibilities": [
+      "EC2"
+  ],
+  "networkMode": "awsvpc"
+}

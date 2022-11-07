@@ -1,0 +1,178 @@
+---
+Parameters:
+  AppMeshMeshName:
+    Type: String
+    Description: Name of mesh
+    Default: musicbox-mesh
+  CloudMapNamespace:
+    Type: String
+    Default: ecs-course.local
+  CloudMapFlamencoService:
+    Type: String
+    Default: flamenco-service
+  CloudMapOperaService:
+    Type: String
+    Default: opera-service
+  CloudMapMusicboxService:
+    Type: String
+    Default: musicbox-service
+
+Resources:
+
+#############################################
+# AppMesh virtual services & router
+#############################################
+  FlamencoVirtualRouter:
+    Type: AWS::AppMesh::VirtualRouter
+    Properties:
+        MeshName: !Ref AppMeshMeshName
+        VirtualRouterName: flamenco-vr
+        Spec:
+          Listeners:
+            - PortMapping:
+                Port: 80
+                Protocol: http
+
+  FlamencoRoute:
+    Type: AWS::AppMesh::Route
+    DependsOn:
+      - FlamencoVirtualRouter
+      - FlamencoAppVirtualNode
+    Properties:
+      MeshName: !Ref AppMeshMeshName
+      VirtualRouterName: flamenco-vr
+      RouteName: flamenco-route
+      Spec:
+        HttpRoute:
+          Action:
+            WeightedTargets:
+              - VirtualNode: flamenco-service-vn
+                Weight: 1 # enable traffic distribution = 100% will be directed to this virtual node
+          Match:
+            Prefix: "/" #all traffic will be forwared to our virtual node (flamenco-service)
+
+  FlamencoVirtualService:
+    Type: AWS::AppMesh::VirtualService
+    DependsOn:
+      - FlamencoVirtualRouter
+    Properties:
+      MeshName: !Ref AppMeshMeshName
+      VirtualServiceName: !Sub "${CloudMapFlamencoService}.${CloudMapNamespace}"
+      Spec:
+        Provider:
+          VirtualRouter:
+            VirtualRouterName: flamenco-vr
+
+  OperaVirtualService:
+    Type: AWS::AppMesh::VirtualService
+    DependsOn:
+      - OperaAppVirtualNode
+    Properties:
+      MeshName: !Ref AppMeshMeshName
+      VirtualServiceName: !Sub "${CloudMapOperaService}.${CloudMapNamespace}"
+      Spec:
+        Provider:
+          VirtualNode:
+            VirtualNodeName: opera-service-vn
+
+  MusicboxVirtualService:
+    Type: AWS::AppMesh::VirtualService
+    DependsOn:
+      - MusicboxAppVirtualNode
+    Properties:
+      MeshName: !Ref AppMeshMeshName
+      VirtualServiceName: !Sub "${CloudMapMusicboxService}.${CloudMapNamespace}"
+      Spec:
+        Provider:
+          VirtualNode:
+            VirtualNodeName: musicbox-service-vn
+
+#############################################
+# virtual nodes for "physical" ECS services
+#############################################
+  FlamencoAppVirtualNode:
+    Type: AWS::AppMesh::VirtualNode
+    Properties:
+      MeshName: !Ref AppMeshMeshName
+      VirtualNodeName: flamenco-service-vn
+      Spec:
+        Listeners:
+          - PortMapping:
+              Port: 80
+              Protocol: http
+            HealthCheck:
+              Protocol: http
+              Path: "/ping"
+              HealthyThreshold: 2
+              UnhealthyThreshold: 2
+              TimeoutMillis: 2000
+              IntervalMillis: 5000
+        ServiceDiscovery:
+          AWSCloudMap:
+            NamespaceName: !Ref CloudMapNamespace
+            ServiceName: !Ref CloudMapFlamencoService
+        
+  OperaAppVirtualNode:
+    Type: AWS::AppMesh::VirtualNode
+    Properties:
+      MeshName: !Ref AppMeshMeshName
+      VirtualNodeName: opera-service-vn
+      Spec:
+        Listeners:
+          - PortMapping:
+              Port: 80
+              Protocol: http
+            HealthCheck:
+              Protocol: http
+              Path: "/ping"
+              HealthyThreshold: 2
+              UnhealthyThreshold: 2
+              TimeoutMillis: 2000
+              IntervalMillis: 5000
+        ServiceDiscovery:
+          AWSCloudMap:
+            NamespaceName: !Ref CloudMapNamespace
+            ServiceName: !Ref CloudMapOperaService
+  
+  MusicboxAppVirtualNode:
+    Type: AWS::AppMesh::VirtualNode
+    DependsOn:
+      - FlamencoVirtualService
+      - OperaVirtualService
+    Properties:
+      MeshName: !Ref AppMeshMeshName
+      VirtualNodeName: musicbox-service-vn
+      Spec:
+        Listeners:
+          - PortMapping:
+              Port: 9000
+              Protocol: http
+        ServiceDiscovery:
+          AWSCloudMap:
+            NamespaceName: !Ref CloudMapNamespace
+            ServiceName: "musicbox-service"
+        Backends:
+          - VirtualService:
+              VirtualServiceName: !Sub "${CloudMapOperaService}.${CloudMapNamespace}"
+          - VirtualService:
+              VirtualServiceName: !Sub "${CloudMapFlamencoService}.${CloudMapNamespace}"
+
+Outputs:    
+  FlamencoAppVirtualNodeName:
+    Description: Name of the FlamencoApp VirtualNode
+    Value:
+      Fn::GetAtt:
+      - FlamencoAppVirtualNode
+      - VirtualNodeName
+  OperaAppVirtualNodeName:
+    Description: Name of the OperaApp VirtualNode
+    Value:
+      Fn::GetAtt:
+      - OperaAppVirtualNode
+      - VirtualNodeName 
+  MusicboxAppVirtualNodeName:
+    Description: Name of the MusicboxApp VirtualNode
+    Value:
+      Fn::GetAtt:
+      - MusicboxAppVirtualNode
+      - VirtualNodeName     

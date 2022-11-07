@@ -1,0 +1,74 @@
+{
+    "executionRoleArn": "arn:aws:iam::Add-Your_Account_ID:role/ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::Add-Your_Account_ID:role/ecsTaskRole",
+    "containerDefinitions": [
+      {
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/microservice-demo",
+            "awslogs-region": "us-west-2",
+            "awslogs-stream-prefix": "ecs"
+          }
+        },
+        "portMappings": [
+          {
+            "hostPort": 0,
+            "protocol": "tcp",
+            "containerPort": 9000
+          }
+        ],
+        "environment": [
+          {
+            "name": "AWS_XRAY_DAEMON_ADDRESS",
+            "value": "xray-daemon:2000"
+          },
+          {
+            "name": "FLAMENCO_HOST",
+            "value": "<<flamenco-host>>:9001"
+          },
+          {
+            "name": "OPERA_HOST",
+            "value": "<<opera-host>>:9002"
+          },
+          {
+            "name": "PORT",
+            "value": "9000"
+          }
+        ],
+        "memoryReservation": 128,
+        "image": "pauloclouddev/musicboxapp:latest",
+        "essential": true,
+        "links": [
+          "xray-daemon"
+        ],
+        "name": "musicbox"
+      },
+      {
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/microservice-demo",
+            "awslogs-region": "us-west-2",
+            "awslogs-stream-prefix": "musicbox/xray"
+          }
+        },
+        "portMappings": [
+          {
+            "hostPort": 0,
+            "protocol": "udp",
+            "containerPort": 2000
+          }
+        ],
+        "cpu": 32,
+        "memoryReservation": 256,
+        "image": "amazon/aws-xray-daemon",        
+        "name": "xray-daemon"
+      }
+    ],
+    "family": "td-musicbox",
+    "requiresCompatibilities": [
+      "EC2"
+    ],
+    "networkMode": "bridge"
+  }
