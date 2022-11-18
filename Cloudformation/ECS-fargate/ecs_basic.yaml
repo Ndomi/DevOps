@@ -9,11 +9,15 @@ Parameters:
   VpcId:
     Type: AWS::EC2::VPC::Id
     Description: Launch ECS cluster in this VPC
+
 Resources:
+
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties: 
       ClusterName: !Sub ${EnvironmentName}-fargate
+      CapacityProviders:
+        - FARGATE
   ContainerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:

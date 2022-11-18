@@ -1,0 +1,6 @@
+[
+    {
+        "name": "web",
+        "imageUri": "225908212644.dkr.ecr.us-east-1.amazonaws.com/manikcloud:latest"
+    }
+]
