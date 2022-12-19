@@ -57,25 +57,18 @@ pipeline {
             }
         }
 
-        stage('TerraformApply'){
+        stage('Approval') {
             steps {
-                script {
-                    def apply = false
-                    try {
-                        input message: 'Can you please confirm the apply', ok: 'Ready to Apply the Config'
-                        apply = true
-                    } catch (err){
-                        apply = false
-                        currentBuild.result = 'UNSTABLE'
-                    }
-                    if(apply){
-                        dir('Terraform/Terraform_Jenkins/jenkins_pipeline/'){
-                            unstash "terraform-plan"
+                input('Do you want to destroy the plan ??')
+            }
+        }
+
+        stage('Destroy'){
+            steps {
+                dir('Terraform/Terraform_Jenkins/jenkins_pipeline/'){
                             sh 'terraform apply terraform.tfplan'
-                        }
-                    }
                 }
             }
         }
-    }
+    }    
 }
