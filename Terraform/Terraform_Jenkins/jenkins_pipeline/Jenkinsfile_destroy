@@ -65,8 +65,8 @@ pipeline {
 
         stage('Destroy'){
             steps {
-                dir('Terraform/Terraform_Jenkins/jenkins_pipeline/'){
-                    unstash "terraform-plan"
+                dir('/var/lib/jenkins/workspace/destroy_pipeline/Terraform/Terraform_Jenkins/jenkins_pipeline'){
+    
                     sh 'terraform destroy'
                 }
             }
