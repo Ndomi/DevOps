@@ -91,8 +91,8 @@ pipeline {
                     }
                     if(apply){
                         dir('Terraform/Terraform_Jenkins/jenkins_pipeline/'){
-                            unstash "terraform-plan"
-                            sh 'terraform destroy terraform.tfplan'
+                            // unstash "terraform-plan"
+                            sh 'terraform destroy --auto-approve'
                         }
                     }
                 }
