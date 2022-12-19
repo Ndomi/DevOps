@@ -67,7 +67,7 @@ pipeline {
             steps {
                 dir('Terraform/Terraform_Jenkins/jenkins_pipeline/'){
                     unstash "terraform-plan"
-                    sh 'terraform destroy --auto-approve'
+                    sh 'terraform destroy terraform.tfplan'
                 }
             }
         }
