@@ -33,9 +33,11 @@ pipeline {
         }
 
         stage('TerraformValidate'){
-            dir('Terraform/Terraform_Jenkins/jenkins_pipeline/') {
-                sh "terraform validate"
-            }
+            steps {
+                dir('Terraform/Terraform_Jenkins/jenkins_pipeline/') {
+                    sh "terraform validate"
+                }
+        }
         }
 
         stage('TerraformPlan'){
