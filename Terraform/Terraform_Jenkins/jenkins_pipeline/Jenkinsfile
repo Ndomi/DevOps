@@ -77,5 +77,26 @@ pipeline {
                 }
             }
         }
+
+        stage('TerraformDestroy'){
+            steps {
+                script {
+                    def apply = false
+                    try {
+                        input message: 'Can you please confirm the apply', ok: 'Ready to Apply the Config'
+                        apply = true
+                    } catch (err){
+                        apply = false
+                        currentBuild.result = 'UNSTABLE'
+                    }
+                    if(apply){
+                        dir('Terraform/Terraform_Jenkins/jenkins_pipeline/'){
+                            unstash "terraform-plan"
+                            sh 'terraform destroy terraform.tfplan'
+                        }
+                    }
+                }
+            }
+        }
     }
 }
