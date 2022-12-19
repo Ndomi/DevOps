@@ -81,18 +81,18 @@ pipeline {
         stage('TerraformDestroy'){
             steps {
                 script {
-                    def apply = false
+                    def destroy = false
                     try {
-                        input message: 'Can you please confirm the apply', ok: 'Ready to Apply the Config'
-                        apply = true
+                        input message: 'Can you please confirm the destroy', ok: 'Ready to Destroy the Config'
+                        destroy = true
                     } catch (err){
-                        apply = false
+                        destroy = false
                         currentBuild.result = 'UNSTABLE'
                     }
                     if(apply){
                         dir('Terraform/Terraform_Jenkins/jenkins_pipeline/'){
-                            // unstash "terraform-plan"
-                            sh 'terraform destroy --auto-approve'
+                            unstash "terraform-plan"
+                            sh 'terraform destroy terraform.tfplan'
                         }
                     }
                 }
