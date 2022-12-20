@@ -1,6 +1,18 @@
 pipeline {
     agent any
 
+    tools {
+        "org.jenkinsci.plugins.terraform.TerraformInstallation" "terraform"
+    }
+
+    environment {
+        TF_HOME = tool('terraform')
+        TP_LOG = "WARN"
+        PATH = "$TF_HOME:$PATH"
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    }
+
     stages {
         // stage('Prod preparation'){
         //     steps {
@@ -27,7 +39,7 @@ pipeline {
         stage ('Destroy') {
             steps {
                 dir('Terraform/Terraform_Jenkins/jenkins_pipeline'){
-                    sh "/usr/bin/terraform destroy --auto-approve"
+                    sh "/usr/bin/terraform destroy -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY' --auto-approve"
                 }
             }
         }
