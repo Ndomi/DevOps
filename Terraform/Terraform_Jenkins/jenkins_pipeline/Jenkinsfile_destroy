@@ -1,29 +1,28 @@
-
 pipeline {
     agent any
 
     stages {
-        stage('Prod preparation'){
-            steps {
-                dir('/var/lib/jenkins/workspace/destroy_pipeline/Terraform/Terraform_Jenkins/jenkins_pipeline'){
-                    sh '/usr/bin/terraform init -input=false'
-                }
-            }
-        }
+        // stage('Prod preparation'){
+        //     steps {
+        //         dir('/var/lib/jenkins/workspace/destroy_pipeline/Terraform/Terraform_Jenkins/jenkins_pipeline'){
+        //             sh '/usr/bin/terraform init -input=false'
+        //         }
+        //     }
+        // }
 
-        stage('Plan'){
-            steps {
-                dir('/var/lib/jenkins/workspace/destroy_pipeline/Terraform/Terraform_Jenkins/jenkins_pipeline'){
-                    sh "/usr/bin/terraform plan -input=false -out tfplan"
-                    sh '/usr/bin/terraform show -no-color tfplan > tfplan.txt'
-                }
-            }
-        }
-        stage('Approval') {
-            steps {
-                input('Do you want to apply the plan ??')
-            }
-        }
+        // stage('Plan'){
+        //     steps {
+        //         dir('/var/lib/jenkins/workspace/destroy_pipeline/Terraform/Terraform_Jenkins/jenkins_pipeline'){
+        //             sh "/usr/bin/terraform plan -input=false -out tfplan"
+        //             sh '/usr/bin/terraform show -no-color tfplan > tfplan.txt'
+        //         }
+        //     }
+        // }
+        // stage('Approval') {
+        //     steps {
+        //         input('Do you want to apply the plan ??')
+        //     }
+        // }
 
         stage ('Destroy') {
             steps {
