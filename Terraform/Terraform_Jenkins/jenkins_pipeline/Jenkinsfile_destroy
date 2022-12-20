@@ -25,8 +25,8 @@ pipeline {
         stage('Plan'){
             steps {
                 dir('Terraform/Terraform_Jenkins/jenkins_pipeline'){
-                    sh "/usr/bin/terraform plan -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY' -input=false -out tfplan"
-                    sh '/usr/bin/terraform show -no-color tfplan > tfplan.txt'
+                    sh "/usr/bin/terraform plan -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY' -input=false -out terraform.tfplan"
+                    sh '/usr/bin/terraform show -no-color terraform.tfplan > tfplan.txt'
                 }
             }
         }
