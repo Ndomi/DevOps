@@ -78,18 +78,18 @@ pipeline {
             }
         }
 
-        stage('Approval') {
-            steps {
-                input('Do you want to Destroy the INFRA ??')
-            }
-        }
+        // stage('Approval') {
+        //     steps {
+        //         input('Do you want to Destroy the INFRA ??')
+        //     }
+        // }
 
-        stage ('Destroy') {
-            steps {
-                dir('Terraform/Terraform_Jenkins/jenkins_pipeline'){
-                    sh "terraform destroy -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY' --auto-approve"
-                }
-            }
-        }
+        // stage ('Destroy') {
+        //     steps {
+        //         dir('Terraform/Terraform_Jenkins/jenkins_pipeline'){
+        //             sh "terraform destroy -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY' --auto-approve"
+        //         }
+        //     }
+        // }
     }
 }
