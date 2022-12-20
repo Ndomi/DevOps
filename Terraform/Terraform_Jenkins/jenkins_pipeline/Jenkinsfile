@@ -24,13 +24,13 @@ pipeline {
             }
         }
 
-        stage('TerraformFormat'){
-            steps{
-                dir('Terraform/Terraform_Jenkins/jenkins_pipeline/') {
-                    sh "terraform fmt -list=true -write=false -diff=true -check=true"
-                }
-            }
-        }
+        // stage('TerraformFormat'){
+        //     steps{
+        //         dir('Terraform/Terraform_Jenkins/jenkins_pipeline/') {
+        //             sh "terraform fmt -list=true -write=false -diff=true -check=true"
+        //         }
+        //     }
+        // }
 
         stage('TerraformValidate'){
             steps {
