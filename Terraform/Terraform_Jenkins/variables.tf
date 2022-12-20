@@ -17,7 +17,7 @@ variable "vpc_cidr" {
 variable "instance_type" {
   description = "Instance type"
   type        = string
-  default     = "t3.micro"
+  default     = "t3.small"
 }
 
 variable "ec2_tags" {
