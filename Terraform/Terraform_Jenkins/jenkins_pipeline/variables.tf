@@ -14,3 +14,7 @@ variable "profile" {
   type = string
   default = "default"
 }
+
+variable "vpc_cidr" {
+    type = "string"
+}
