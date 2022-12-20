@@ -23,3 +23,7 @@ data "aws_ami" "amzlinux2" {
     values = ["x86_64"]
   }
 }
+
+data "aws_availability_zones" "available" {
+  state = "available"
+}
