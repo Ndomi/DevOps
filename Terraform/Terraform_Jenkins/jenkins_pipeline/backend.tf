@@ -13,3 +13,16 @@ resource "aws_dynamodb_table" "dynamodb-terraform-lock" {
       "Name" = "terraformLock Table"
     }
 }
+
+terraform {
+  backend "s3" {
+    bucket = "jenkins-state-20221214"
+    region = "us-east-1"
+    key = "terraform.tfstate"
+  }
+}
+
+provider "aws" {
+  region = var.region
+  profile = var.profile
+}
