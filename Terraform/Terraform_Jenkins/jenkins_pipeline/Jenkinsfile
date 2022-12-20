@@ -80,7 +80,7 @@ pipeline {
 
         stage('Approval') {
             steps {
-                input('Do you want to apply the plan ??')
+                input('Do you want to Destroy the INFRA ??')
             }
         }
 
