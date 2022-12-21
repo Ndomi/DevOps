@@ -14,7 +14,7 @@ resource "aws_security_group_rule" "sg_ingress_public_443" {
   from_port = 443
   to_port = 443
   protocol = "tcp"
-  cidr_blocks = ["0.0.0.0/"]
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "sg_ingress_public_80" {
