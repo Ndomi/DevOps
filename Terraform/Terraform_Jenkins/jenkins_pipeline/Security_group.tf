@@ -1,3 +1,12 @@
+resource "aws_security_group" "public_sg" {
+  name = "${var.project}-Public-sg"
+  vpc_id = aws_vpc.myvpc.id
+
+  tags = {
+    "Name" = "${var.project}-Public-sg"
+  }
+}
+
 resource "aws_security_group_rule" "sg_ingress_public_443" {
   security_group_id = aws_security_group.public_sg.id
 
