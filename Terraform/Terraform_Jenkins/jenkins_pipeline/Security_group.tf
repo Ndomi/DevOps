@@ -24,7 +24,7 @@ resource "aws_security_group_rule" "sg_ingress_public_80" {
   from_port = 80
   to_port = 80
   protocol = "tcp"
-  cidr_blocks = ["0.0.0.0/"]
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "sg_egress_public" {
@@ -34,7 +34,7 @@ resource "aws_security_group_rule" "sg_egress_public" {
   from_port = 0
   to_port = 0
   protocol = "-1"
-  cidr_blocks = ["0.0.0.0/"]
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group" "data_plane_sg" {
