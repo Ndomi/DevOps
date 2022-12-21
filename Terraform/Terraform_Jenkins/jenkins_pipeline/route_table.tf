@@ -22,4 +22,8 @@ resource "aws_route" "ngw_RT" {
   route_table_id = aws_vpc.myvpc.default_route_table_id
   nat_gateway_id = aws_nat_gateway.nat-gw.id
   destination_cidr_block = "0.0.0.0/0"
+
+  tags = {
+    "Name" = "${var.project}-NGW_RT"
+  }
 }
