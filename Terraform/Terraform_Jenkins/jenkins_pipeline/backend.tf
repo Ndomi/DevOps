@@ -16,12 +16,12 @@ resource "aws_dynamodb_table" "dynamodb-terraform-lock" {
 
 terraform {
   backend "s3" {
-    bucket         = "jenkins-state-20221214"
-    region         = "us-east-1"
-    key            = "terraform.tfstate"
+    bucket = "jenkins-state-20221214"
+    region = "us-east-1"
+    key    = "terraform.tfstate"
   }
 }
 
 provider "aws" {
-  region  = var.region
+  region = var.region
 }

@@ -6,35 +6,35 @@ variable "secret_key" {
 }
 
 variable "region" {
-  type = string
+  type    = string
   default = "us-east-1"
 }
 
 variable "profile" {
-  type = string
+  type    = string
   default = "default"
 }
 
 variable "vpc_cidr" {
-    type = string
-    default = "10.1.0.0/16"
+  type    = string
+  default = "10.1.0.0/16"
 }
 
 variable "subnet_cidr" {
-  type = string
+  type    = string
   default = "10.1.0.0/24"
 }
 
 variable "availability_zones_count" {
-    description = "The number AZs"
-    type = number
-    default = 2
+  description = "The number AZs"
+  type        = number
+  default     = 2
 }
 
 variable "project" {
   description = "Name to be used on all the resources as identifier. e.g. Project name, Application name"
-  type = string
-  default = "EKS_project"
+  type        = string
+  default     = "EKS_project"
 }
 
 variable "subnet_cidr_bits" {
