@@ -1,0 +1,43 @@
+1. Copy paste the following in a YAML file, name it grafana.yaml
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.prometheus.svc.cluster.local
+      access: proxy
+      isDefault: true
+
+2. Grab Grafana Helm charts
+helm repo add grafana https://grafana.github.io/helm-charts
+
+3. Install Grafana
+kubectl create namespace grafana
+
+helm install grafana grafana/grafana \
+    --namespace grafana \
+    --set persistence.storageClassName="gp2" \
+    --set persistence.enabled=true \
+    --set adminPassword='EKS!sAWSome' \
+    --values grafana.yaml \
+    --set service.type=LoadBalancer
+
+4. Check if Grafana is deployed properly
+kubectl get all -n grafana
+
+5. Get Grafana ELB url
+export ELB=$(kubectl get svc -n grafana grafana -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+echo "http://$ELB"
+
+6. When logging in, use username "admin" and get password by running the following:
+kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+
+7. Grafana Dashboards for K8s:
+https://grafana.com/grafana/dashboards?dataSource=prometheus&direction=desc&orderBy=reviewsCount
+
+8. Uninstall Prometheus and Grafana
+helm uninstall prometheus --namespace prometheus
+helm uninstall grafana --namespace grafana
