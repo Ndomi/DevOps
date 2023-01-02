@@ -1,3 +1,4 @@
+# Create a cluster
 resource "aws_eks_cluster" "eks_cluster" {
   name     = "${var.project}-cluster"
   role_arn = aws_iam_role.cluster.arn
