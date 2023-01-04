@@ -1,0 +1,28 @@
+[
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "home",
+        "kind": 2,
+        "importPath": "flask_app.wsgi",
+        "description": "flask_app.wsgi",
+        "peekOfCode": "def home():\n    return \"Hello, this is an application\"\nif __name__ == \"__main__\":\n    app.run(debug=True)",
+        "detail": "flask_app.wsgi",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "flask_app.wsgi",
+        "description": "flask_app.wsgi",
+        "peekOfCode": "app = Flask(__name__)\n@app.route(\"/\")\ndef home():\n    return \"Hello, this is an application\"\nif __name__ == \"__main__\":\n    app.run(debug=True)",
+        "detail": "flask_app.wsgi",
+        "documentation": {}
+    }
+]
