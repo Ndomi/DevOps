@@ -1,0 +1,1 @@
+aws es create-elasticsearch-domain --domain-name eks-logs --elasticsearch-version 7.9 --elasticsearch-cluster-config InstanceType=t3.small.elasticsearch,InstanceCount=1 --ebs-options EBSEnabled=true,VolumeType=gp2,VolumeSize=10

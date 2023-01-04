@@ -1,5 +1,21 @@
 [
     {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
         "label": "settings",
         "importPath": "django.conf",
         "description": "django.conf",
@@ -742,11 +758,21 @@
         "documentation": {}
     },
     {
-        "label": "Flask",
-        "importPath": "flask",
-        "description": "flask",
-        "isExtraImport": true,
-        "detail": "flask",
+        "label": "home",
+        "kind": 2,
+        "importPath": "Docker.flask_app.wsgi",
+        "description": "Docker.flask_app.wsgi",
+        "peekOfCode": "def home():\n    return \"Hello, this is an application\"\nif __name__ == \"__main__\":\n    app.run(debug=True)",
+        "detail": "Docker.flask_app.wsgi",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "Docker.flask_app.wsgi",
+        "description": "Docker.flask_app.wsgi",
+        "peekOfCode": "app = Flask(__name__)\n@app.route(\"/\")\ndef home():\n    return \"Hello, this is an application\"\nif __name__ == \"__main__\":\n    app.run(debug=True)",
+        "detail": "Docker.flask_app.wsgi",
         "documentation": {}
     },
     {
