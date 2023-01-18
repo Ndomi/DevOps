@@ -1,4 +1,12 @@
 # Local .terraform directories
+
+.venv*
+venv*
+.vscode*
+vscode*
+.ideal*
+ideal*
+
 **/.terraform/*
 
 # .tfstate files
