@@ -6,5 +6,6 @@
     <mapping directory="$PROJECT_DIR$/GitLab_CICD/my-ecs-demo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Github_actions/action-hero" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Python/Django/Social_Media/django-social-media-template" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ndomirepo" vcs="Git" />
   </component>
 </project>
