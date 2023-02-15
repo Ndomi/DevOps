@@ -15,6 +15,7 @@ resource "aws_dynamodb_table" "dynamodb-terraform-lock" {
 }
 
 terraform {
+  required_version = "~> 1.3.7"
   backend "s3" {
     bucket = "redis-ecs-20230202"
     region = "us-east-1"
